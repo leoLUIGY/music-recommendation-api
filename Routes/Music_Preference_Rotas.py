@@ -48,15 +48,15 @@ def get_preference(query: MusicPreferenceBuscaSchema):
         session.close()
 
 @app.post('/preference', tags=[preferences_tag])
-def add_preference(form: MusicPreferenceSchema):
+def add_preference(body: MusicPreferenceSchema):
     """ Adicionar uma nova preferencia
     """
     
     preference = MusicPreference(
-        nome = form.nome,
-        genero = form.genero,
-        artista = form.artista,
-        data_criacao = form.data_criacao
+        nome = body.nome,
+        genero = body.genero,
+        artista = body.artista,
+        data_criacao = body.data_criacao
     )
     session = Session()
     try:
@@ -75,10 +75,10 @@ def add_preference(form: MusicPreferenceSchema):
         session.close()
 
 @app.put('/preference', tags=[preferences_tag])
-def update_preference(form: MusicPreferenceUpdateSchema):
+def update_preference(body: MusicPreferenceUpdateSchema):
     """Editar informações de uma preferencia
     """
-    preference_id = form.id
+    preference_id = body.id
     session = Session()
     try:
         preference = session.query(MusicPreference).filter(MusicPreference.id == preference_id).first()
@@ -87,10 +87,10 @@ def update_preference(form: MusicPreferenceUpdateSchema):
             return {"mesage": error_msg}, 404
         else:
             
-            preference.nome = form.nome
-            preference.genero = form.genero
-            preference.artista = form.artista
-            preference.data_criacao = form.data_criacao
+            preference.nome = body.nome
+            preference.genero = body.genero
+            preference.artista = body.artista
+            preference.data_criacao = body.data_criacao
 
         
             session.commit()
